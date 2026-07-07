@@ -13,7 +13,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "three": "^r130",
+    "three": "0.160.0",
     "cannon-es": "^0.20.0"
   },
   "devDependencies": {
