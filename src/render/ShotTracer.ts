@@ -1,32 +1,47 @@
 import * as THREE from 'three';
 
 export class ShotTracer {
-  private tracerLine: THREE.Line | null = null;
-  private tracerPoints: THREE.Vector3[] = [];
+  private scene: THREE.Scene;
+  private line: THREE.Line | null = null;
+  private material: THREE.LineBasicMaterial;
 
-  addPoint(pos: THREE.Vector3): void {
-    this.tracerPoints.push(pos.clone());
+  constructor(scene: THREE.Scene) {
+    this.scene = scene;
+    this.material = new THREE.LineBasicMaterial({
+      color: 0xffff00,
+      linewidth: 2,
+      transparent: true,
+      opacity: 0.7,
+    });
   }
 
-  render(scene: THREE.Scene): void {
-    if (this.tracerLine) {
-      scene.remove(this.tracerLine);
+  drawPath(positions: THREE.Vector3[]): void {
+    // Remove previous line if it exists
+    if (this.line) {
+      this.scene.remove(this.line);
     }
 
-    if (this.tracerPoints.length < 2) return;
+    if (positions.length < 2) return;
 
-    const geometry = new THREE.BufferGeometry().setFromPoints(this.tracerPoints);
-    const material = new THREE.LineBasicMaterial({ color: 0xffff00, linewidth: 2 });
-    this.tracerLine = new THREE.Line(geometry, material);
-    scene.add(this.tracerLine);
+    // Create line geometry from positions
+    const geometry = new THREE.BufferGeometry();
+    const points = positions.map((p) => new THREE.Vector3(p.x, p.y, p.z));
+    geometry.setFromPoints(points);
+
+    // Create and add line to scene
+    this.line = new THREE.Line(geometry, this.material);
+    this.scene.add(this.line);
+
+    // Fade out the line after 3 seconds
+    setTimeout(() => {
+      this.clear();
+    }, 3000);
   }
 
   clear(): void {
-    this.tracerPoints = [];
-    if (this.tracerLine) {
-      this.tracerLine.geometry.dispose();
-      (this.tracerLine.material as THREE.Material).dispose();
+    if (this.line) {
+      this.scene.remove(this.line);
+      this.line = null;
     }
-    this.tracerLine = null;
   }
 }
