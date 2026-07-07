@@ -1,0 +1,14 @@
+{
+  "name": "University Links",
+  "holes": [
+    {
+      "holeNumber": 1,
+      "par": 4,
+      "handicap": 10,
+      "teePositions": [[0, 0], [5, 0], [10, 0]],
+      "pinPosition": [350, 0],
+      "fairwaySpline": [[0, 0], [100, 50], [200, 80], [300, 100], [350, 0]]
+    }
+  ],
+  "terrainHeightmap": "/textures/university_links_heightmap.png"
+}
